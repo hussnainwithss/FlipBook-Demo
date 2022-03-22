@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
+import React from "react";
+import { useFlipBook } from "./hooks/useFlipbook";
 // import FlipBook from "./Components/FlipBook";
 
 const pdfPaths = [
@@ -18,29 +18,28 @@ const pdfPaths = [
 ];
 
 function App() {
-  const [pdfPath, setPdfPath] = useState(pdfPaths[0].path);
+  const { FlipBook, setPdfPath, unLoadPdf } = useFlipBook({
+    initialPdfPath: pdfPaths[0].path,
+  });
+
   const handleChange = (e) => {
     // setPdfPath(e.target.value);
     setPdfPath(e.target.value);
+    // setPdf(e.target.value);
   };
-  useEffect(() =>
-    window
-      .$(".solid-container")
-      .FlipBook({ pdf: pdfPath })
-  ,[pdfPath]);
 
   return (
     <>
       <div>
-        {console.log("url",process.env.PUBLIC_URL)}
+        {console.log("url", process.env.PUBLIC_URL)}
         <select onChange={handleChange}>
           {pdfPaths.map((pdfPath) => (
             <option value={pdfPath.path}>{pdfPath.name}</option>
           ))}
         </select>
+        <button onClick={unLoadPdf}>Unload Pdf</button>
       </div>
-
-      <div className="solid-container" style={{ height: "800px" }}></div>
+      <FlipBook />
     </>
   );
 }
